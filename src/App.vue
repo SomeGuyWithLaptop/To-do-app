@@ -1,6 +1,6 @@
 <template>
   <h1>To-Do App</h1>
-  <form @submit.prevent="addTodo()">
+  <form>
   <label>New Task</label>
   <input    
         v-model="newTodo"
