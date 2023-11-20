@@ -29,7 +29,7 @@ export default {
         const newTodo = ref(''); 
         const defaultData = [{
             done: false, 
-            content: 'Write a blog post'
+            content: 'Things to do go here'
         }]
         const todosData = JSON.parse(localStorage.getItem('todos')) || defaultData; 
         const todos = ref(todosData);
