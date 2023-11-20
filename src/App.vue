@@ -1,6 +1,6 @@
 <template>
   <h1>To-Do App</h1>
-  <form>
+  <form @submit.prevent="addTodo()">
   <label>New Task</label>
   <input    
         v-model="newTodo"
@@ -21,18 +21,18 @@
 </template>
 
 <script>
-import { reactive } from 'vue';
+import { ref } from 'vue';
 
 export default {
   name: 'App',
   setup(){
-        const newTodo = reactive(''); 
+        const newTodo = ref(''); 
         const defaultData = [{
             done: false, 
             content: 'Write a blog post'
         }]
         const todosData = JSON.parse(localStorage.getItem('todos')) || defaultData; 
-        const todos = reactive(todosData);
+        const todos = ref(todosData);
         function addTodo () { 
                   if (newTodo.value) {
                       todos.value.push({ done: false, content: newTodo.value });
