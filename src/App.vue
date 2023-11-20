@@ -13,7 +13,14 @@
   <h2> To-Do List</h2>
   <ul>
     <li v-for="(todo, index) in todos" :key="index"> 
-    <span :class="{done: todo.done}" @click="doneTodo(todo)"> {{ todo.content }} </span>
+    <span v-if="!todo.editing" :class="{done: todo.done}" @click="doneTodo(todo)"> {{ todo.content }} </span>
+
+    <input v-else v-model="todo.content"
+        @keyup.enter="updateTodo(index)"
+        @blur="updateTodo(index)"
+      />
+
+    <button @click="editTodo(index)">Edit</button>
     <button @click="removeTodo(index)">Remove</button>
     </li>
   </ul>
@@ -29,17 +36,23 @@ export default {
         const newTodo = ref(''); 
         const defaultData = [{
             done: false, 
-            content: 'Things to do go here'
-        }]
+            content: 'Things to do go here',
+            editing: false,
+    
+  },
+];
         const todosData = JSON.parse(localStorage.getItem('todos')) || defaultData; 
         const todos = ref(todosData);
+
         function addTodo () { 
                   if (newTodo.value) {
-                      todos.value.push({ done: false, content: newTodo.value });
-                      newTodo.value = ''; 
+                      todos.value.push({ done: false, content: newTodo.value, editing: false,});
+                      newTodo.value = '' 
+                      
                   }
                   saveData();
         }
+
         function doneTodo (todo) {
           todo.done = !todo.done
           saveData();
@@ -49,6 +62,15 @@ export default {
           todos.value.splice(index,1)
           saveData();
         }
+
+        function editTodo(index) {
+      todos.value[index].editing = true;
+    }
+
+    function updateTodo(index) {
+      todos.value[index].editing = false;
+      saveData();
+    }
         function saveData() {
           const storageData = JSON.stringify(todos.value);
           localStorage.setItem('todos', storageData);
@@ -59,7 +81,9 @@ export default {
           addTodo,
           doneTodo, 
           removeTodo, 
-          saveData
+          saveData,
+          editTodo,
+          updateTodo
         }
   }
 }
